@@ -60,7 +60,7 @@ export default {
         },
         endpoints: {
           login: { url: '/login_json', method: 'post' },
-          logout: { url: '/', method: 'delete' },
+          logout: false,
           user: false
         }
       }

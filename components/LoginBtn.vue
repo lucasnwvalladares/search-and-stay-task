@@ -18,7 +18,11 @@ export default {
         }
       }
       this.$auth.loginWith('local', { data: credentials })
-        .then(response => console.log('Logged In!', response))
+        .then((response) => {
+          const user = response.data.result.name
+          this.$auth.setUser(user)
+          console.log('Logged In!', response)
+        })
         .catch(err => console.error(err))
     }
   }

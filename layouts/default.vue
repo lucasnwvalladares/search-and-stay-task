@@ -5,7 +5,7 @@
 
       <b-navbar-nav class="ml-auto">
         <div v-if="$auth.loggedIn">
-          <b-button @click="$auth.logout">Logout</b-button>
+          <b-button @click="logout">Logout</b-button>
         </div>
         <div v-else>
           <LoginBtn />
@@ -25,6 +25,12 @@ export default {
   data () {
     return {
       fixed: false
+    }
+  },
+
+  methods: {
+    logout () {
+      this.$auth.logout()
     }
   }
 }
