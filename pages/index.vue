@@ -1,5 +1,5 @@
 <template>
-  <div>Hello World</div>
+  <div>ok</div>
 </template>
 
 <script>
@@ -20,9 +20,10 @@ export default {
         password: ENV.apiLogin.password
       }
     }
-    this.$axios.$post('https://sys-dev.searchandstay.com/api/admin/login_json', body).then((response) => {
-      console.log(response)
-    })
+    this.$axios.$post('https://sys-dev.searchandstay.com/api/admin/login_json', body)
+      .then((response) => {
+        console.log(response)
+      })
   }
 }
 </script>
