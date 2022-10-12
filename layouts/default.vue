@@ -1,15 +1,14 @@
 <template>
-  <v-app dark>
+  <main>
     <b-navbar>
       <b-navbar-brand href="#">Search & Stay</b-navbar-brand>
 
       <b-navbar-nav class="ml-auto">
         <div v-if="$auth.loggedIn">
-          {{ $auth.user.email }}
-          <b-button>Logout</b-button>
+          <b-button @click="$auth.logout">Logout</b-button>
         </div>
         <div v-else>
-          <b-button to="/login">Login</b-button>
+          <LoginBtn />
         </div>
       </b-navbar-nav>
     </b-navbar>
@@ -17,7 +16,7 @@
     <b-container>
       <Nuxt />
     </b-container>
-  </v-app>
+  </main>
 </template>
 
 <script>

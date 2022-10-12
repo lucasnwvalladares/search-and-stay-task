@@ -50,7 +50,21 @@ export default {
   },
 
   auth: {
-
+    strategies: {
+      local: {
+        token: {
+          property: 'data.result.access_token',
+          global: true,
+          required: true,
+          type: 'Bearer'
+        },
+        endpoints: {
+          login: { url: '/login_json', method: 'post' },
+          logout: { url: '/', method: 'delete' },
+          user: false
+        }
+      }
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
