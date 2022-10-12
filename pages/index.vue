@@ -1,5 +1,7 @@
 <template>
-  <div>ok</div>
+  <div>
+    ok
+  </div>
 </template>
 
 <script>
@@ -9,6 +11,12 @@ export default {
     return {
 
     }
+  },
+
+  mounted () {
+    this.$store.dispatch('colors/getAllColors')
+      .then(res => console.table(res.data.entities))
+      .catch(err => console.err(err))
   }
 }
 </script>
