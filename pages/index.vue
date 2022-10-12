@@ -1,6 +1,8 @@
 <template>
   <div>
-    <ColorTable />
+    <div v-if="$auth.loggedIn">
+      <b-button to="color">colors</b-button>
+    </div>
   </div>
 </template>
 

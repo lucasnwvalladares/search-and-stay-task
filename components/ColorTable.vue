@@ -1,17 +1,47 @@
 <template>
-  <div>
-    {{ $store.state.colors.colors }}
+  <div class="content">
+    <div v-if="!$fetch.loading">
+      <b-table
+        striped
+        borderless
+        hover
+        foot-clone
+        head-variant="dark"
+        table-variant="info"
+        :fields="fields"
+        :items="$store.state.colors.colors.data.entities"
+        @row-clicked="handleClick"
+      />
+    </div>
   </div>
 </template>
 <script>
 export default {
-  mounted () {
-    this.$store.dispatch('colors/getAllColors')
-      .then(res => console.table(res.data.entities))
-      .catch(err => console.err(err))
+  data () {
+    return {
+      fields: ['id', 'bg_color', 'text_color', 'active', 'order']
+    }
+  },
+
+  async fetch () {
+    await this.$store.dispatch('colors/getAllColors')
+      .then(res => console.error(res))
+      .catch(err => console.error(err))
+  },
+
+  methods: {
+    handleClick (record) {
+      this.$router.push({ path: '/color/' + record.id })
+    }
   }
 }
 </script>
 <style scope>
+  .content {
+    margin-top: 2em;
+  }
 
+  table.b-table[aria-busy='true'] {
+    opacity: 0.6;
+  }
 </style>
