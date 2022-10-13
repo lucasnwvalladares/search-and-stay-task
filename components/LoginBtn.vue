@@ -23,9 +23,9 @@ export default {
             const user = response.data.result.name
             this.$auth.setUser(user)
           }
-          console.log('Logged In!', response)
+          return response
         })
-        .catch(err => console.error(err))
+        .catch((err) => { return err })
     }
   }
 }

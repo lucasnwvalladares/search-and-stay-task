@@ -32,24 +32,55 @@
         <td>{{ color.order }}</td>
       </tr>
     </table>
+    <div class="del-upt-btns">
+      <b-button @click="deleteColor">Delete</b-button>
+      <b-button>Update</b-button>
+    </div>
   </div>
 </template>
 <script>
 export default {
   data () {
     return {
-      color: this.$store.state.color.colors.data.entities[this.$route.params.id]
+
     }
   },
+
+  async fetch () {
+    const color = await this.$axios.$get('https://sys-dev.searchandstay.com/api/admin/calendar_patterns/', { params: { id: this.$route.params.id } })
+      .then((response) => { return response })
+      .catch((error) => { return error })
+    return color
+  },
+
   methods: {
     paintSquares () {
       const bgSquare = document.getElementById('bg-square')
       bgSquare.setAttribute('background', 'green')
     }
+
+    /* deleteColor () {
+      const id = this.color.id
+      return this.$axios.$delete('https://sys-dev.searchandstay.com/api/admin/calendar_patterns/', { params: { id } })
+        .then((response) => { return response })
+        .then(this.$router.push({ path: '/color' }))
+        .catch((error) => { return error })
+    } */
   }
 }
 </script>
 <style scope>
+  .content {
+    display: flex;
+    gap: 10px;
+  }
+
+  .del-upt-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
   table {
     border: 1px solid black;
     row-gap: 10px;
