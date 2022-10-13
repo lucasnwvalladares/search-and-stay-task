@@ -1,6 +1,9 @@
 <template>
   <div class="content">
-    <div v-if="!$fetch.loading">
+    <div v-if="$fetch.loading">
+      <h3>Loading data...</h3>
+    </div>
+    <div v-else>
       <b-table
         striped
         borderless
@@ -9,7 +12,7 @@
         head-variant="dark"
         table-variant="info"
         :fields="fields"
-        :items="$store.state.colors.colors.data.entities"
+        :items="$store.state.color.colors.data.entities"
         @row-clicked="handleClick"
       />
     </div>
@@ -24,7 +27,7 @@ export default {
   },
 
   async fetch () {
-    await this.$store.dispatch('colors/getAllColors')
+    await this.$store.dispatch('color/getColor')
       .then(res => console.error(res))
       .catch(err => console.error(err))
   },
@@ -39,9 +42,5 @@ export default {
 <style scope>
   .content {
     margin-top: 2em;
-  }
-
-  table.b-table[aria-busy='true'] {
-    opacity: 0.6;
   }
 </style>
