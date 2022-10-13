@@ -13,8 +13,8 @@
         :items="patterns"
         @row-clicked="handleClick"
       >
-        <template #cell(icon)="">
-          <a @click="deleteColor">
+        <template #cell(icon)="row">
+          <a @click="deletePattern(row.item)">
             <b-icon icon="trash" />
           </a>
         </template>
@@ -45,8 +45,11 @@ export default {
       this.$router.push({ path: '/color/' + record.id })
     },
 
-    deleteColor (record) {
-      console.log('TRAHS DELETE', record)
+    deletePattern (pattern) {
+      this.$store.dispatch('patterns/delete', { id: pattern.id })
+        .then(() => {
+          this.$store.dispatch('patterns/get')
+        })
     }
   }
 }

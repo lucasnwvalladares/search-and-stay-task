@@ -13,12 +13,23 @@ export const actions = {
   },
   async set ({ commit }, pattterns) {
     await commit('SET', pattterns)
+  },
+  async delete ({ commit }, params) {
+    try {
+      return await this.$axios.$delete(`calendar_patterns/9${params.id}`)
+        .then((res) => { console.log(res) })
+    } catch (error) {
+      return error
+    }
   }
 }
 
 export const mutations = {
   SET (state, pattern) {
     state.patternsList = pattern
+  },
+  DELETE (state, { pattern }) {
+    state.patternsList = state.patternsList.filter(p => pattern.id !== p.id)
   }
 }
 
