@@ -17,10 +17,15 @@ export const actions = {
   async delete ({ commit }, params) {
     try {
       return await this.$axios.$delete(`calendar_patterns/9${params.id}`)
-        .then((res) => { console.log(res) })
+        .then((res) => { return res })
     } catch (error) {
       return error
     }
+  },
+  async create ({ commit }, params) {
+    return await this.$axios.$post('calendar_patterns', { body: params })
+      .then((res) => { return res })
+      .then((error) => { return error })
   }
 }
 

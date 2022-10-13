@@ -1,7 +1,10 @@
 <template>
   <div>
     <div v-if="$auth.loggedIn">
-      <b-button to="color">colors</b-button>
+      <h2>You're logged in...</h2>
+    </div>
+    <div v-else>
+      <h2>Please make login</h2>
     </div>
   </div>
 </template>
