@@ -9,7 +9,6 @@
         <th>Bg-Color</th>
         <td>
           <b-row class="row">
-            <div id="bg-square" class="square" />
             {{ pattern.bg_color }}
           </b-row>
         </td>
@@ -18,7 +17,6 @@
         <th>Text-Color</th>
         <td>
           <b-row class="row">
-            <div id="text-square" class="square" />
             {{ pattern.text_color }}
           </b-row>
         </td>
@@ -38,23 +36,36 @@
       </b-button>
     </div>
     <b-form v-if="show" @submit="onSubmit" @reset="onReset">
+      <h3>Update Color Pattern</h3>
       <b-form-group id="input-group-1" label="Bg Color:" label-for="input-1">
         <b-form-input
           id="input-1"
+          maxLength="7"
           :value="pattern.bg_color"
           placeholder="e.g. #000000"
           required
           @input="updateBg"
+          @keydown="inputBgValidation()"
+        />
+        <b-form-input
+          :value="form.calendar_patterns.bg_color"
+          type="color"
         />
       </b-form-group>
 
       <b-form-group id="input-group-2" label="Text Color:" label-for="input-2">
         <b-form-input
           id="input-2"
+          maxLength="7"
           :value="pattern.text_color"
           placeholder="e.g. #000000"
           required
           @input="updateText"
+          @keydown="inputTextValidation()"
+        />
+        <b-form-input
+          :value="form.calendar_patterns.text_color"
+          type="color"
         />
       </b-form-group>
 
@@ -94,7 +105,9 @@ export default {
         }
       },
       isActive: [1, 0],
-      show: false
+      show: false,
+      alphanumeric: /^[\p{L}\p{N}]*$/u,
+      hexColor: /^#([0-9a-f]{3}){1,2}$/i
     }
   },
 
@@ -109,19 +122,17 @@ export default {
     this.form.calendar_patterns.bg_color = this.pattern.bg_color
     this.form.calendar_patterns.text_color = this.pattern.text_color
     this.form.calendar_patterns.active = this.pattern.active
+    this.inputBgColor = this.pattern.bg_color
   },
 
   methods: {
-    paintSquares () {
-      const bgSquare = document.getElementById('bg-square')
-      bgSquare.setAttribute('background-color', '#434165')
-    },
     showForm () {
       this.show = true
       const btn = document.getElementById('btnUpdate')
       btn.style.display = 'none'
     },
-    onSubmit () {
+    onSubmit (event) {
+      event.preventDefault()
       const id = this.form.calendar_patterns.id
       const data = {
         calendar_patterns: {
@@ -130,21 +141,25 @@ export default {
           active: this.form.calendar_patterns.active
         }
       }
-      this.$store.dispatch('patterns/update', { id, data: data.calendar_patterns })
-        .then((res) => {
-          alert(res.message)
-          return res
-        })
-        .catch((error) => {
-          alert(error.response)
-          return error.response.data
-        })
+      if (this.hexColor.test(data.calendar_patterns.bg_color) && this.hexColor.test(data.calendar_patterns.text_color)) {
+        this.$store.dispatch('patterns/update', { id, data: data.calendar_patterns })
+          .then((res) => {
+            alert(res.message)
+            return res
+          })
+          .catch((error) => {
+            alert(error.response)
+            return error.response.data
+          })
+      } else {
+        alert('Invalid hex code for colors')
+      }
     },
     onReset (event) {
       event.preventDefault()
-      this.form.calendar_patterns.bg_color = ''
-      this.form.calendar_patterns.text_color = ''
-      this.form.calendar_patterns.active = 1
+      this.form.calendar_patterns.bg_color = this.pattern.bg_color
+      this.form.calendar_patterns.text_color = this.pattern.text_color
+      this.form.calendar_patterns.active = this.pattern.active
       this.show = false
       this.$nextTick(() => {
         this.show = true
@@ -158,6 +173,26 @@ export default {
     },
     updateActive (e) {
       this.form.calendar_patterns.active = e
+    },
+    inputBgValidation () {
+      const inputBgHash = document.getElementById('input-1')
+      this.startInputValue(inputBgHash)
+      this.isNotAlphanumeric()
+    },
+    inputTextValidation () {
+      const inputTextHash = document.getElementById('input-2')
+      this.startInputValue(inputTextHash)
+      this.isNotAlphanumeric()
+    },
+    startInputValue (inputElement) {
+      if (inputElement.selectionStart === 0) {
+        inputElement.value = '#'
+      }
+    },
+    isNotAlphanumeric () {
+      if (!window.event.key.match(this.alphanumeric)) {
+        window.event.preventDefault()
+      }
     }
   }
 }
@@ -188,13 +223,6 @@ export default {
 
   table tr th, table tr td {
     padding: 10px;
-    border: 1px solid black;
-  }
-
-  .square {
-    --size: 20px;
-    height: var(--size);
-    width: var(--size);
     border: 1px solid black;
   }
 

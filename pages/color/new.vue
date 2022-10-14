@@ -3,22 +3,40 @@
   <div>
     <h2>Create a New Pattern</h2>
     <b-form v-if="show" @submit="onSubmit" @reset="onReset">
-      <b-form-group id="input-group-1" label="Bg Color:" label-for="input-1">
+      <b-form-group id="input-group-1" label="Bg Color:" label-for="input-1" @submit.stop.prevent>
         <b-form-input
           id="input-1"
           v-model="form.calendar_patterns.bg_color"
+          maxLength="7"
           placeholder="e.g. #000000"
           required
+          :state="bgColorValidation"
+          @keydown="hashBg()"
         />
+        <b-form-invalid-feedback :state="bgColorValidation">
+          Not a Hex Color
+        </b-form-invalid-feedback>
+        <b-form-valid-feedback :state="bgColorValidation">
+          Looks Good.
+        </b-form-valid-feedback>
       </b-form-group>
 
       <b-form-group id="input-group-2" label="Text Color:" label-for="input-2">
         <b-form-input
           id="input-2"
           v-model="form.calendar_patterns.text_color"
+          maxLength="7"
           placeholder="e.g. #000000"
           required
+          :state="textColorValidation"
+          @keydown="hashText()"
         />
+        <b-form-invalid-feedback :state="textColorValidation">
+          Not a Hex Color
+        </b-form-invalid-feedback>
+        <b-form-valid-feedback :state="textColorValidation">
+          Looks Good.
+        </b-form-valid-feedback>
       </b-form-group>
 
       <b-form-group id="input-group-3" label="Active:" label-for="input-3">
@@ -55,11 +73,22 @@ export default {
         }
       },
       isActive: [1, 0],
-      show: true
+      show: true,
+      alphanumeric: /^[\p{L}\p{N}]*$/u,
+      hexColor: /^#([0-9a-f]{3}){1,2}$/i
+    }
+  },
+  computed: {
+    bgColorValidation () {
+      return this.hexColor.test(this.form.calendar_patterns.bg_color)
+    },
+    textColorValidation () {
+      return this.hexColor.test(this.form.calendar_patterns.text_color)
     }
   },
   methods: {
-    onSubmit () {
+    onSubmit (e) {
+      e.preventDefault()
       const data = {
         calendar_patterns: {
           bg_color: this.form.calendar_patterns.bg_color,
@@ -67,15 +96,22 @@ export default {
           active: this.form.calendar_patterns.active
         }
       }
-      this.$store.dispatch('patterns/create', data.calendar_patterns)
-        .then((res) => {
-          alert(res.message)
-          return res
-        })
-        .catch((error) => {
-          alert(error.response)
-          return error.response.data
-        })
+      if (this.bgColorValidation && this.textColorValidation) {
+        this.$store.dispatch('patterns/create', data.calendar_patterns)
+          .then((res) => {
+            alert(res.message)
+            return res
+          })
+          .then(() => {
+            this.onReset(e)
+          })
+          .catch((error) => {
+            alert(error.response)
+            return error.response.data
+          })
+      } else {
+        alert('Invalid fields')
+      }
     },
     onReset (event) {
       event.preventDefault()
@@ -86,6 +122,26 @@ export default {
       this.$nextTick(() => {
         this.show = true
       })
+    },
+    hashBg () {
+      const inputBgHash = document.getElementById('input-1')
+      this.startInputValue(inputBgHash)
+      this.isNotAlphanumeric()
+    },
+    hashText () {
+      const inputTextHash = document.getElementById('input-2')
+      this.startInputValue(inputTextHash)
+      this.isNotAlphanumeric()
+    },
+    startInputValue (inputElement) {
+      if (inputElement.selectionStart === 0) {
+        inputElement.value = '#'
+      }
+    },
+    isNotAlphanumeric () {
+      if (!window.event.key.match(this.alphanumeric)) {
+        window.event.preventDefault()
+      }
     }
   }
 }

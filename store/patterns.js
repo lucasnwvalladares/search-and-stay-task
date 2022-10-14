@@ -71,5 +71,8 @@ export const mutations = {
 export const getters = {
   getPatterns: (state) => {
     return state.patternsList
+  },
+  getPattern: (state) => {
+    return state.singlePattern
   }
 }
