@@ -32,16 +32,68 @@
         <td>{{ pattern.order }}</td>
       </tr>
     </table>
-    <div class="del-upt-btns">
-      <b-button>Update</b-button>
+    <div class="update-btn">
+      <b-button id="btnUpdate" @click="showForm">
+        Update
+      </b-button>
     </div>
+    <b-form v-if="show" @submit="onSubmit" @reset="onReset">
+      <b-form-group id="input-group-1" label="Bg Color:" label-for="input-1">
+        <b-form-input
+          id="input-1"
+          :value="pattern.bg_color"
+          placeholder="e.g. #000000"
+          required
+          @input="updateBg"
+        />
+      </b-form-group>
+
+      <b-form-group id="input-group-2" label="Text Color:" label-for="input-2">
+        <b-form-input
+          id="input-2"
+          :value="pattern.text_color"
+          placeholder="e.g. #000000"
+          required
+          @input="updateText"
+        />
+      </b-form-group>
+
+      <b-form-group id="input-group-3" label="Active:" label-for="input-3">
+        <b-form-select
+          id="input-3"
+          :value="pattern.active"
+          :options="isActive"
+          required
+          @input="updateActive"
+        />
+      </b-form-group>
+
+      <b-button type="submit" variant="primary">
+        Submit
+      </b-button>
+      <b-button type="reset" variant="danger">
+        Reset
+      </b-button>
+    </b-form>
+    <b-card class="mt-3" header="Form Data Result">
+      <pre class="m-0">{{ form }}</pre>
+    </b-card>
   </div>
 </template>
 <script>
 export default {
   data () {
     return {
-
+      form: {
+        calendar_patterns: {
+          id: '',
+          bg_color: '',
+          text_color: '',
+          active: 1
+        }
+      },
+      isActive: [1, 0],
+      show: false
     }
   },
 
@@ -51,10 +103,60 @@ export default {
     }
   },
 
+  created () {
+    this.form.calendar_patterns.id = this.pattern.id
+    this.form.calendar_patterns.bg_color = this.pattern.bg_color
+    this.form.calendar_patterns.text_color = this.pattern.text_color
+    this.form.calendar_patterns.active = this.pattern.active
+  },
+
   methods: {
     paintSquares () {
       const bgSquare = document.getElementById('bg-square')
-      bgSquare.setAttribute('background', 'green')
+      bgSquare.setAttribute('background-color', '#434165')
+    },
+    showForm () {
+      this.show = true
+      const btn = document.getElementById('btnUpdate')
+      btn.style.display = 'none'
+    },
+    onSubmit () {
+      const id = this.form.calendar_patterns.id
+      const data = {
+        calendar_patterns: {
+          bg_color: this.form.calendar_patterns.bg_color,
+          text_color: this.form.calendar_patterns.text_color,
+          active: this.form.calendar_patterns.active
+        }
+      }
+      this.$store.dispatch('patterns/update', { id, data: data.calendar_patterns })
+        .then((res) => {
+          alert(res.message)
+          return res
+        })
+        .catch((error) => {
+          alert(error.response)
+          return error.response.data
+        })
+    },
+    onReset (event) {
+      event.preventDefault()
+      this.form.calendar_patterns.bg_color = ''
+      this.form.calendar_patterns.text_color = ''
+      this.form.calendar_patterns.active = 1
+      this.show = false
+      this.$nextTick(() => {
+        this.show = true
+      })
+    },
+    updateBg (e) {
+      this.form.calendar_patterns.bg_color = e
+    },
+    updateText (e) {
+      this.form.calendar_patterns.text_color = e
+    },
+    updateActive (e) {
+      this.form.calendar_patterns.active = e
     }
   }
 }
@@ -65,7 +167,7 @@ export default {
     gap: 10px;
   }
 
-  .del-upt-btns {
+  .update-btn {
     display: flex;
     flex-direction: column;
     gap: 10px;

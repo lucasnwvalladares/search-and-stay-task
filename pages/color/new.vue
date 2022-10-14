@@ -2,7 +2,7 @@
 <template>
   <div>
     <h2>Create a New Pattern</h2>
-    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+    <b-form v-if="show" @submit="onSubmit" @reset="onReset">
       <b-form-group id="input-group-1" label="Bg Color:" label-for="input-1">
         <b-form-input
           id="input-1"

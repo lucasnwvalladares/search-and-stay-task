@@ -13,10 +13,8 @@ export const actions = {
   },
   async show ({ commit }, params) {
     try {
-      console.log('ENTERS TRY', params)
       return await this.$axios.$get(`calendar_patterns/${params}`)
         .then((res) => {
-          console.log('enters here')
           commit('SET_PATTERN', res.data)
           return res.data
         })
@@ -39,6 +37,18 @@ export const actions = {
     try {
       return await this.$axios.$post('calendar_patterns', { calendar_patterns: data })
         .then((res) => { return res })
+        .catch((error) => { return error.response })
+    } catch (error) {
+      return error
+    }
+  },
+  async update ({ commit }, { id, data }) {
+    try {
+      return await this.$axios.$put(`calendar_patterns/${id}`, { calendar_patterns: data })
+        .then((res) => {
+          commit('SET_PATTERN', res.data)
+          return res
+        })
         .catch((error) => { return error.response })
     } catch (error) {
       return error
