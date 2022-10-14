@@ -24,6 +24,7 @@
 </template>
 <script>
 export default {
+  middleware: 'auth',
   data () {
     return {
       fields: ['id', 'bg_color', 'text_color', 'active', 'order', 'icon']

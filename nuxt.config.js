@@ -54,6 +54,9 @@ export default {
   },
 
   auth: {
+    redirect: {
+      login: '/'
+    },
     strategies: {
       local: {
         token: {
