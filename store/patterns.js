@@ -35,10 +35,14 @@ export const actions = {
       return error
     }
   },
-  async create ({ commit }, params) {
-    return await this.$axios.$post('calendar_patterns', { body: params })
-      .then((res) => { return res })
-      .then((error) => { return error })
+  async create ({ commit }, data) {
+    try {
+      return await this.$axios.$post('calendar_patterns', { calendar_patterns: data })
+        .then((res) => { return res })
+        .catch((error) => { return error.response })
+    } catch (error) {
+      return error
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
-    New Patter
+    <h2>Create a New Pattern</h2>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-form-group id="input-group-1" label="Bg Color:" label-for="input-1">
         <b-form-input
@@ -58,12 +58,23 @@ export default {
     }
   },
   methods: {
-    onSubmit (event) {
-      event.preventDefault()
-      this.$store.dispatch('patterns/create', this.form)
-        .then((res) => { return res })
-        .catch((error) => { return error.response.data })
-      this.onReset(event)
+    onSubmit () {
+      const data = {
+        calendar_patterns: {
+          bg_color: this.form.calendar_patterns.bg_color,
+          text_color: this.form.calendar_patterns.text_color,
+          active: this.form.calendar_patterns.active
+        }
+      }
+      this.$store.dispatch('patterns/create', data.calendar_patterns)
+        .then((res) => {
+          alert(res.message)
+          return res
+        })
+        .catch((error) => {
+          alert(error.response)
+          return error.response.data
+        })
     },
     onReset (event) {
       event.preventDefault()
