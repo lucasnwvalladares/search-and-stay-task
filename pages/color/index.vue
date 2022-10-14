@@ -42,13 +42,17 @@ export default {
 
   methods: {
     handleClick (record) {
-      this.$router.push({ path: '/color/' + record.id })
+      this.$store.dispatch('patterns/show', record.id)
+        .then((res) => {
+          this.$router.push({ path: '/color/' + record.id })
+        })
     },
 
     deletePattern (pattern) {
       this.$store.dispatch('patterns/delete', { id: pattern.id })
-        .then(() => {
+        .then((res) => {
           this.$store.dispatch('patterns/get')
+          alert(res.message)
         })
     }
   }

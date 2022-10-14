@@ -58,14 +58,6 @@ export default {
       const bgSquare = document.getElementById('bg-square')
       bgSquare.setAttribute('background', 'green')
     }
-
-    /* deleteColor () {
-      const id = this.color.id
-      return this.$axios.$delete('https://sys-dev.searchandstay.com/api/admin/calendar_patterns/', { params: { id } })
-        .then((response) => { return response })
-        .then(this.$router.push({ path: '/color' }))
-        .catch((error) => { return error })
-    } */
   }
 }
 </script>
@@ -112,6 +104,6 @@ export default {
   }
 
   .row:first-of-type {
-    background: ;
+    background: inherit;
   }
 </style>
