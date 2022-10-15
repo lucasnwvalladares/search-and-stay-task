@@ -31,7 +31,7 @@
       </tr>
     </table>
     <div class="update-btn">
-      <b-button id="btnUpdate" @click="showForm">
+      <b-button id="btnUpdate" variant="primary" @click="showForm">
         Update
       </b-button>
     </div>
@@ -79,10 +79,10 @@
         />
       </b-form-group>
 
-      <b-button type="submit" variant="primary">
+      <b-button type="submit" variant="success">
         Submit
       </b-button>
-      <b-button type="reset" variant="danger">
+      <b-button type="reset" variant="warning">
         Reset
       </b-button>
     </b-form>
@@ -112,28 +112,33 @@ export default {
   },
 
   computed: {
+    // gets a pattern from the store
     pattern () {
       return this.$store.state.patterns.singlePattern
     }
   },
 
+  // populates form with data retriven by computed
   created () {
     this.form.calendar_patterns.id = this.pattern.id
     this.form.calendar_patterns.bg_color = this.pattern.bg_color
     this.form.calendar_patterns.text_color = this.pattern.text_color
     this.form.calendar_patterns.active = this.pattern.active
-    this.inputBgColor = this.pattern.bg_color
   },
 
   methods: {
+    // button shows form and hide itself
     showForm () {
       this.show = true
       const btn = document.getElementById('btnUpdate')
       btn.style.display = 'none'
     },
+
+    // submit button
     onSubmit (event) {
-      event.preventDefault()
-      const id = this.form.calendar_patterns.id
+      event.preventDefault() // prevent from reloading page
+      const id = this.form.calendar_patterns.id // pattern id
+      // data to send as the request body
       const data = {
         calendar_patterns: {
           bg_color: this.form.calendar_patterns.bg_color,
@@ -141,6 +146,7 @@ export default {
           active: this.form.calendar_patterns.active
         }
       }
+      // if validades values as hex colors
       if (this.hexColor.test(data.calendar_patterns.bg_color) && this.hexColor.test(data.calendar_patterns.text_color)) {
         this.$store.dispatch('patterns/update', { id, data: data.calendar_patterns })
           .then((res) => {
@@ -155,6 +161,8 @@ export default {
         alert('Invalid hex code for colors')
       }
     },
+
+    // reset form data to pattern data
     onReset (event) {
       event.preventDefault()
       this.form.calendar_patterns.bg_color = this.pattern.bg_color
@@ -165,6 +173,8 @@ export default {
         this.show = true
       })
     },
+
+    // watcher methods to update form data result
     updateBg (e) {
       this.form.calendar_patterns.bg_color = e
     },
@@ -174,21 +184,29 @@ export default {
     updateActive (e) {
       this.form.calendar_patterns.active = e
     },
+
+    // validations method for Bg Color Input
     inputBgValidation () {
       const inputBgHash = document.getElementById('input-1')
       this.startInputValue(inputBgHash)
       this.isNotAlphanumeric()
     },
+
+    // validations method for Text Color Input
     inputTextValidation () {
       const inputTextHash = document.getElementById('input-2')
       this.startInputValue(inputTextHash)
       this.isNotAlphanumeric()
     },
+
+    // makes the input start with #
     startInputValue (inputElement) {
       if (inputElement.selectionStart === 0) {
         inputElement.value = '#'
       }
     },
+
+    // checkes if input value is not a simbol
     isNotAlphanumeric () {
       if (!window.event.key.match(this.alphanumeric)) {
         window.event.preventDefault()

@@ -18,7 +18,7 @@
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <div v-if="$auth.loggedIn">
-          <b-button @click="logout">
+          <b-button variant="outline-secondary" @click="logout">
             Logout
           </b-button>
         </div>
@@ -44,6 +44,7 @@ export default {
   },
 
   methods: {
+    // logs the user out
     logout () {
       this.$auth.logout()
     }

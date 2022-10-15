@@ -11,7 +11,7 @@
           placeholder="e.g. #000000"
           required
           :state="bgColorValidation"
-          @keydown="hashBg()"
+          @keydown="inputBgValidation()"
         />
         <b-form-invalid-feedback :state="bgColorValidation">
           Not a Hex Color
@@ -29,7 +29,7 @@
           placeholder="e.g. #000000"
           required
           :state="textColorValidation"
-          @keydown="hashText()"
+          @keydown="inputTextValidation()"
         />
         <b-form-invalid-feedback :state="textColorValidation">
           Not a Hex Color
@@ -48,10 +48,10 @@
         />
       </b-form-group>
 
-      <b-button type="submit" variant="primary">
+      <b-button type="submit" variant="success">
         Submit
       </b-button>
-      <b-button type="reset" variant="danger">
+      <b-button type="reset" variant="warning">
         Reset
       </b-button>
     </b-form>
@@ -79,16 +79,21 @@ export default {
     }
   },
   computed: {
+    // form validation for bg color input
     bgColorValidation () {
       return this.hexColor.test(this.form.calendar_patterns.bg_color)
     },
+
+    // form validation for text color input
     textColorValidation () {
       return this.hexColor.test(this.form.calendar_patterns.text_color)
     }
   },
+
   methods: {
     onSubmit (e) {
-      e.preventDefault()
+      e.preventDefault() // prevent from reloading page
+      // data to send as the request body
       const data = {
         calendar_patterns: {
           bg_color: this.form.calendar_patterns.bg_color,
@@ -96,6 +101,7 @@ export default {
           active: this.form.calendar_patterns.active
         }
       }
+      // if validades values as hex colors
       if (this.bgColorValidation && this.textColorValidation) {
         this.$store.dispatch('patterns/create', data.calendar_patterns)
           .then((res) => {
@@ -113,6 +119,8 @@ export default {
         alert('Invalid fields')
       }
     },
+
+    // reset form data
     onReset (event) {
       event.preventDefault()
       this.form.calendar_patterns.bg_color = ''
@@ -123,21 +131,29 @@ export default {
         this.show = true
       })
     },
-    hashBg () {
+
+    // validations method for Bg Color Input
+    inputBgValidation () {
       const inputBgHash = document.getElementById('input-1')
       this.startInputValue(inputBgHash)
       this.isNotAlphanumeric()
     },
-    hashText () {
+
+    // validations method for Text Color Input
+    inputTextValidation () {
       const inputTextHash = document.getElementById('input-2')
       this.startInputValue(inputTextHash)
       this.isNotAlphanumeric()
     },
+
+    // makes the input start with #
     startInputValue (inputElement) {
       if (inputElement.selectionStart === 0) {
         inputElement.value = '#'
       }
     },
+
+    // checkes if input value is not a simbol
     isNotAlphanumeric () {
       if (!window.event.key.match(this.alphanumeric)) {
         window.event.preventDefault()

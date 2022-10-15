@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button @click="login">
+    <b-button variant="outline-primary" @click="login">
       Login
     </b-button>
   </div>
@@ -10,6 +10,7 @@ import ENV from '@/env'
 
 export default {
   methods: {
+    // gets credentials from .env file to make the request body
     login () {
       const credentials = {
         login: {
@@ -17,6 +18,8 @@ export default {
           password: ENV.apiLogin.password
         }
       }
+
+      // promise to log the user with auth
       this.$auth.loginWith('local', { data: credentials })
         .then((response) => {
           if (this.$auth.loggedIn) {
