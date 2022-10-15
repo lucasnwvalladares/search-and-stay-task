@@ -1,40 +1,44 @@
 <template>
-  <div class="content">
-    <table>
-      <tr>
-        <th>Id</th>
-        <td>{{ pattern.id }}</td>
-      </tr>
-      <tr>
-        <th>Bg-Color</th>
-        <td>
-          <b-row class="row">
-            {{ pattern.bg_color }}
-          </b-row>
-        </td>
-      </tr>
-      <tr>
-        <th>Text-Color</th>
-        <td>
-          <b-row class="row">
-            {{ pattern.text_color }}
-          </b-row>
-        </td>
-      </tr>
-      <tr>
-        <th>Active</th>
-        <td>{{ pattern.active }}</td>
-      </tr>
-      <tr>
-        <th>Order</th>
-        <td>{{ pattern.order }}</td>
-      </tr>
-    </table>
+  <div class="content col-sm-12">
+    <div>
+      <table>
+        <tr>
+          <th>Id</th>
+          <td>{{ pattern.id }}</td>
+        </tr>
+        <tr>
+          <th>Bg-Color</th>
+          <td>
+            <b-row class="row">
+              {{ pattern.bg_color }}
+            </b-row>
+          </td>
+        </tr>
+        <tr>
+          <th>Text-Color</th>
+          <td>
+            <b-row class="row">
+              {{ pattern.text_color }}
+            </b-row>
+          </td>
+        </tr>
+        <tr>
+          <th>Active</th>
+          <td>{{ pattern.active }}</td>
+        </tr>
+        <tr>
+          <th>Order</th>
+          <td>{{ pattern.order }}</td>
+        </tr>
+      </table>
+    </div>
+
     <div class="update-btn">
       <b-button id="btnUpdate" variant="primary" @click="showForm">
         Update
       </b-button>
     </div>
+
     <b-form v-if="show" @submit="onSubmit" @reset="onReset">
       <h3>Update Color Pattern</h3>
       <b-form-group id="input-group-1" label="Bg Color:" label-for="input-1">
@@ -82,6 +86,7 @@
       <b-button type="submit" variant="success">
         Submit
       </b-button>
+
       <b-button type="reset" variant="warning">
         Reset
       </b-button>
@@ -217,20 +222,18 @@ export default {
 </script>
 <style scope>
   .content {
-    display: flex;
-    gap: 10px;
+    justify-content: center;
   }
 
   .update-btn {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    margin: 10px;
+    margin-left: 0;
   }
 
   table {
-    border: 1px solid black;
     row-gap: 10px;
-    min-width: 400px;
+    margin-right: auto;
+    margin-left: auto;
   }
 
   th {
@@ -248,9 +251,5 @@ export default {
     padding-left: 15px;
     align-items: center;
     gap: 10px;
-  }
-
-  .row:first-of-type {
-    background: inherit;
   }
 </style>

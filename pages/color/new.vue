@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div>
+  <main class="col-lg-12 col-md-12 col-sm-12">
     <h2>Create a New Pattern</h2>
     <b-form v-if="show" @submit="onSubmit" @reset="onReset">
       <b-form-group id="input-group-1" label="Bg Color:" label-for="input-1" @submit.stop.prevent>
@@ -58,7 +58,7 @@
     <b-card class="mt-3" header="Form Data Result">
       <pre class="m-0">{{ form }}</pre>
     </b-card>
-  </div>
+  </main>
 </template>
 <script>
 export default {
@@ -163,5 +163,7 @@ export default {
 }
 </script>
 <style scope>
-
+  main {
+    min-width: 420px;
+  }
 </style>

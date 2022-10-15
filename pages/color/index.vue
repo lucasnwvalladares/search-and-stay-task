@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="content">
+  <div class="content col-sm-12">
     <div>
       <b-table
         striped
@@ -67,6 +67,6 @@ export default {
 </script>
 <style scope>
   .content {
-    margin-top: 2em;
+    justify-content: center;
   }
 </style>
